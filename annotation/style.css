@@ -1,0 +1,23 @@
+h1 {
+	font-size: 64px;
+	color: gray;
+	text-align: center;
+}
+
+body {
+	font-family: serif;
+	background-color: #F8F888;
+}
+
+video {
+	display: block;
+	margin: auto;
+	justify-content: center;
+}
+
+#lyrics {
+	margin-top: 40px;
+	font-size: 32px;
+	color: SlateGray;
+	text-align: center;
+}
