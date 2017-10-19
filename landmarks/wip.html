@@ -5,10 +5,10 @@
 	<head>
 		<title>Google Maps API version 3 Example</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-		<script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry"></script>
 		<link rel="stylesheet" href="example.css" />
 		<script>
-
+			var user;
 			var lat = -99999;
 			var lng = -99999;
 
@@ -37,7 +37,6 @@
 						
 						people_data = JSON.parse(request.responseText);
 						var len = people_data.people.length;
-						var windows = [];
 						var tmp_marker;
 						var tmp_pos_data;
 						for (i = 0; i < len; i++){
@@ -55,13 +54,13 @@
 								console.log(tmp_marker.title);
 
 								tmp_marker.setMap(map);
-								windows[i] = new google.maps.InfoWindow();
-								windows[i].setContent(tmp_marker.title);
-								windows[i].open(map, tmp_marker);
-
+								win = new google.maps.InfoWindow();
 								google.maps.event.addListener(tmp_marker, 
 									'click', function() {
-										windows[10].open(map, tmp_marker);
+									var dist = google.maps.geometry.spherical.computeDistanceBetween(user, this.position);
+										win.setContent("user: " + this.title
+														+ "  |  distance: " + dist );
+										win.open(map, this);
 									});
 							}
 						}
@@ -91,7 +90,7 @@
 			{
 
 				// user location
-				var user = new google.maps.LatLng(lat, lng);
+				user = new google.maps.LatLng(lat, lng);
 				console.log(user);
 				// Set up map
 				var myOptions = {
