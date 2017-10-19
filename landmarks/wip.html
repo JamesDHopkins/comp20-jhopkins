@@ -37,6 +37,7 @@
 						
 						people_data = JSON.parse(request.responseText);
 						var len = people_data.people.length;
+						var windows = [];
 						var tmp_marker;
 						var tmp_pos_data;
 						for (i = 0; i < len; i++){
@@ -49,14 +50,22 @@
 
 								tmp_marker = new google.maps.Marker({
 										position: tmp_pos_data,
-										title: "" + people_data.people[i].login
+										title: people_data.people[i].login
 								});
-								//console.log(tmp_marker);
+								console.log(tmp_marker.title);
 
 								tmp_marker.setMap(map);
-								//console.log(map);
+								windows[i] = new google.maps.InfoWindow();
+
+								google.maps.event.addListener(tmp_marker, 
+									'click', function() {
+										windows[i].setContent(
+											tmp_marker.title);
+										windows[i].open(map, tmp_marker);
+									});
+							}
 						}
-						}
+						console.log(windows);
 						//console.log(people_data);
 					}
 				}
@@ -82,7 +91,7 @@
 					position: user,
 					title: "My Location!"
 				});
-				console.log(marker);
+				//console.log(marker);
 				marker.setMap(map);
 				// This is a global info window...
 				var infowindow = new google.maps.InfoWindow();
