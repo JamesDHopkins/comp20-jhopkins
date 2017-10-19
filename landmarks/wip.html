@@ -56,17 +56,33 @@
 
 								tmp_marker.setMap(map);
 								windows[i] = new google.maps.InfoWindow();
+								windows[i].setContent(tmp_marker.title);
+								windows[i].open(map, tmp_marker);
 
 								google.maps.event.addListener(tmp_marker, 
 									'click', function() {
-										windows[i].setContent(
-											tmp_marker.title);
-										windows[i].open(map, tmp_marker);
+										windows[10].open(map, tmp_marker);
 									});
 							}
 						}
-						console.log(windows);
-						//console.log(people_data);
+
+						land_len = people_data.landmarks.length;
+						//console.log(land_len);
+						for (i = 0; i < land_len; i++){
+								tmp_pos_data =  new google.maps.LatLng(
+											people_data.landmarks[i].geometry.coordinates[0], 
+											people_data.landmarks[i].geometry.coordinates[1]);
+//								console.log(tmp_pos_data);
+
+								tmp_marker = new google.maps.Marker({
+										position: tmp_pos_data,
+										title: 
+										people_data.landmarks[i].properties.Location_Name
+								});
+								console.log(tmp_marker);
+						}
+						//console.log(windows);
+						console.log(people_data);
 					}
 				}
 			}
