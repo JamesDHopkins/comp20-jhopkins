@@ -11,6 +11,9 @@
 			var user;
 			var lat = -99999;
 			var lng = -99999;
+			var person_icon = 'http://maps.gstatic.com/mapfiles/ms2/micons/horsebackriding.png'
+			var landmark_icon = 'http://maps.gstatic.com/mapfiles/ms2/micons/ltblu-pushpin.png'
+			var map;
 
 			function getLocation(){
 				navigator.geolocation.getCurrentPosition(function(myPos){
@@ -49,17 +52,19 @@
 
 								tmp_marker = new google.maps.Marker({
 										position: tmp_pos_data,
-										title: people_data.people[i].login
+										title: people_data.people[i].login,
+										icon : person_icon
 								});
-								console.log(tmp_marker.title);
+								console.log(tmp_marker);
 
 								tmp_marker.setMap(map);
 								win = new google.maps.InfoWindow();
 								google.maps.event.addListener(tmp_marker, 
 									'click', function() {
 									var dist = google.maps.geometry.spherical.computeDistanceBetween(user, this.position);
+										dist = dist * 0.000621371;
 										win.setContent("user: " + this.title
-														+ "  |  distance: " + dist );
+														+ "  |  distance: " + dist + " mi" );
 										win.open(map, this);
 									});
 							}
@@ -68,17 +73,27 @@
 						land_len = people_data.landmarks.length;
 						//console.log(land_len);
 						for (i = 0; i < land_len; i++){
-								tmp_pos_data =  new google.maps.LatLng(
-											people_data.landmarks[i].geometry.coordinates[0], 
-											people_data.landmarks[i].geometry.coordinates[1]);
-//								console.log(tmp_pos_data);
 
-								tmp_marker = new google.maps.Marker({
-										position: tmp_pos_data,
-										title: 
-										people_data.landmarks[i].properties.Location_Name
+							tmp_pos_data =  new google.maps.LatLng(people_data.landmarks[i].geometry.coordinates[1], people_data.landmarks[i].geometry.coordinates[0]);
+
+							//console.log(people_data.landmarks[i].geometry.coordinates[1]);
+
+							tmp_marker = new google.maps.Marker({
+									position: tmp_pos_data,
+									title: people_data.landmarks[i].properties.Location_Name,
+									icon: landmark_icon
+							});
+
+							tmp_marker.setMap(map);
+
+							win = new google.maps.InfoWindow();
+							google.maps.event.addListener(tmp_marker, 
+								'click', function() {
+//								var dist = google.maps.geometry.spherical.computeDistanceBetween(user, this.position);
+//									dist = dist * 0.000621371;
+									win.setContent( this.title);
+									win.open(map, this);
 								});
-								console.log(tmp_marker);
 						}
 						//console.log(windows);
 						console.log(people_data);
