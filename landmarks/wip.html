@@ -29,11 +29,35 @@
 				request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				var send_info = "login=LDiXy0sS&lat=" + lat + "&lng=" + lng;
 				request.send(send_info);
+
 				console.log("loadPeople");
 
 				request.onreadystatechange = function() {
 					if (request.readyState == 4){
-						console.log(request.responseText);
+						
+						people_data = JSON.parse(request.responseText);
+						var len = people_data.people.length;
+						var tmp_marker;
+						var tmp_pos_data;
+						for (i = 0; i < len; i++){
+							if (people_data.people[i].login != "LDiXy0sS"){
+
+								tmp_pos_data =  new google.maps.LatLng(
+											people_data.people[i].lat, 
+											people_data.people[i].lng);
+								//console.log(tmp_pos_data);
+
+								tmp_marker = new google.maps.Marker({
+										position: tmp_pos_data,
+										title: "" + people_data.people[i].login
+								});
+								//console.log(tmp_marker);
+
+								tmp_marker.setMap(map);
+								//console.log(map);
+						}
+						}
+						//console.log(people_data);
 					}
 				}
 			}
@@ -41,23 +65,24 @@
 			function init()
 			{
 
-				// Faneuil Hall
-				var landmark = new google.maps.LatLng(lat, lng);
-			
+				// user location
+				var user = new google.maps.LatLng(lat, lng);
+				console.log(user);
 				// Set up map
 				var myOptions = {
-					zoom: 13, // The larger the zoom number, the bigger the zoom
-					center: landmark,
+					zoom: 14, // The larger the zoom number, the bigger the zoom
+					center: user,
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
 				
 				// Create the map in the "map_canvas" <div>
-				var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+				map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 				// Create a marker				
 				var marker = new google.maps.Marker({
-					position: landmark,
+					position: user,
 					title: "My Location!"
 				});
+				console.log(marker);
 				marker.setMap(map);
 				// This is a global info window...
 				var infowindow = new google.maps.InfoWindow();
@@ -74,6 +99,6 @@
 	</head>
 	
 	<body onload="getLocation()">
-		<div id="map_canvas"></div>
+		<div id="map_canvas"> rendering... </div>
 	</body>
 </html>
