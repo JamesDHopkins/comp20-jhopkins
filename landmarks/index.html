@@ -3,10 +3,10 @@
 <html>
 
 	<head>
-		<title>Google Maps API version 3 Example</title>
+		<title>Historic Landmarks</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 		<script src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry"></script>
-		<link rel="stylesheet" href="example.css" />
+		<link rel="stylesheet" href="map.css" />
 		<script>
 			var user;
 			var lat = -99999;
@@ -14,6 +14,9 @@
 			var person_icon = 'http://maps.gstatic.com/mapfiles/ms2/micons/horsebackriding.png'
 			var landmark_icon = 'http://maps.gstatic.com/mapfiles/ms2/micons/ltblu-pushpin.png'
 			var map;
+			var tmp_dist;
+			var closest_landmark = {distance: 99999, name: ""};
+			var user_marker;
 
 			function getLocation(){
 				navigator.geolocation.getCurrentPosition(function(myPos){
@@ -33,7 +36,7 @@
 				var send_info = "login=LDiXy0sS&lat=" + lat + "&lng=" + lng;
 				request.send(send_info);
 
-				console.log("loadPeople");
+				//console.log("loadPeople");
 
 				request.onreadystatechange = function() {
 					if (request.readyState == 4){
@@ -55,7 +58,7 @@
 										title: people_data.people[i].login,
 										icon : person_icon
 								});
-								console.log(tmp_marker);
+								//console.log(tmp_marker);
 
 								tmp_marker.setMap(map);
 								win = new google.maps.InfoWindow();
@@ -63,8 +66,8 @@
 									'click', function() {
 									var dist = google.maps.geometry.spherical.computeDistanceBetween(user, this.position);
 										dist = dist * 0.000621371;
-										win.setContent("user: " + this.title
-														+ "  |  distance: " + dist + " mi" );
+										win.setContent("User: " + this.title
+														+ "  |  Distance: " + dist + " mi" );
 										win.open(map, this);
 									});
 							}
@@ -84,19 +87,34 @@
 									icon: landmark_icon
 							});
 
+							tmp_dist = google.maps.geometry.spherical.computeDistanceBetween(user, tmp_marker.position);
+
+							if ((tmp_dist * 0.000621371) < closest_landmark.distance) {
+								closest_landmark.distance = tmp_dist * 0.000621371;
+								closest_landmark.name = tmp_marker.title;
+							}
+							console.log(closest_landmark);
+
 							tmp_marker.setMap(map);
 
 							win = new google.maps.InfoWindow();
 							google.maps.event.addListener(tmp_marker, 
 								'click', function() {
-//								var dist = google.maps.geometry.spherical.computeDistanceBetween(user, this.position);
-//									dist = dist * 0.000621371;
 									win.setContent( this.title);
 									win.open(map, this);
 								});
 						}
+						// This is a global info window...
+						var infowindow = new google.maps.InfoWindow();
+				
+						// Open info window on click of marker
+						google.maps.event.addListener(user_marker, 'click', function() {
+							infowindow.setContent("Closest Landmark: " + closest_landmark.name +
+								" | Distance " + closest_landmark.distance + " mi");
+							infowindow.open(map, user_marker);
+						});						
 						//console.log(windows);
-						console.log(people_data);
+						//console.log(people_data);
 					}
 				}
 			}
@@ -117,20 +135,12 @@
 				// Create the map in the "map_canvas" <div>
 				map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 				// Create a marker				
-				var marker = new google.maps.Marker({
+				user_marker = new google.maps.Marker({
 					position: user,
 					title: "My Location!"
 				});
 				//console.log(marker);
-				marker.setMap(map);
-				// This is a global info window...
-				var infowindow = new google.maps.InfoWindow();
-				
-				// Open info window on click of marker
-				google.maps.event.addListener(marker, 'click', function() {
-					infowindow.setContent(marker.title);
-					infowindow.open(map, marker);
-				});
+				user_marker.setMap(map);
 
 				loadPeople();
 			}
