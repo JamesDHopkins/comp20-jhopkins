@@ -5,6 +5,7 @@
 	<head>
 		<title>Historic Landmarks</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+		<meta charset="utf-8"/>
 		<script src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry, drawing"></script>
 		<link rel="stylesheet" href="map.css" />
 		<script>
@@ -37,8 +38,6 @@
 				var send_info = "login=LDiXy0sS&lat=" + lat + "&lng=" + lng;
 				request.send(send_info);
 
-				//console.log("loadPeople");
-
 				request.onreadystatechange = function() {
 					if (request.readyState == 4){
 						
@@ -52,14 +51,13 @@
 								tmp_pos_data =  new google.maps.LatLng(
 											people_data.people[i].lat, 
 											people_data.people[i].lng);
-								//console.log(tmp_pos_data);
 
 								tmp_marker = new google.maps.Marker({
 										position: tmp_pos_data,
 										title: people_data.people[i].login,
 										icon : person_icon
 								});
-								//console.log(tmp_marker);
+
 
 								tmp_marker.setMap(map);
 								win = new google.maps.InfoWindow();
@@ -75,12 +73,10 @@
 						}
 
 						land_len = people_data.landmarks.length;
-						//console.log(land_len);
+
 						for (i = 0; i < land_len; i++){
 
 							tmp_pos_data =  new google.maps.LatLng(people_data.landmarks[i].geometry.coordinates[1], people_data.landmarks[i].geometry.coordinates[0]);
-
-							//console.log(people_data.landmarks[i].geometry.coordinates[1]);
 
 							tmp_marker = new google.maps.Marker({
 									position: tmp_pos_data,
@@ -95,7 +91,6 @@
 								closest_landmark.name = tmp_marker.title;
 								closest_obj = tmp_marker;
 							}
-							console.log(closest_obj);
 
 							tmp_marker.setMap(map);
 
@@ -106,19 +101,15 @@
 									win.open(map, this);
 								});
 						}
-						// This is a global info window...
+
 						var infowindow = new google.maps.InfoWindow();
-				
-						// Open info window on click of marker
+			
 						google.maps.event.addListener(user_marker, 'click', function() {
 							infowindow.setContent("Closest Landmark: " + closest_landmark.name +
 								" | Distance " + closest_landmark.distance + " mi");
 							infowindow.open(map, user_marker);
 						});
 
-						var lat2 = (closest_obj.position.lat);
-						var lng2 = (closest_obj.position.lng);
-						console.log(closest_obj.position);
  						var to_landmark = [
           					{lat: lat, lng: lng},
           					closest_obj.position
@@ -133,8 +124,6 @@
         				});
 
         				Landmark_line.setMap(map);						
-						//console.log(windows);
-						//console.log(people_data);
 					}
 				}
 			}
@@ -142,24 +131,20 @@
 			function init()
 			{
 
-				// user location
 				user = new google.maps.LatLng(lat, lng);
-				console.log(user);
-				// Set up map
+
 				var myOptions = {
-					zoom: 14, // The larger the zoom number, the bigger the zoom
+					zoom: 14,
 					center: user,
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
 				
-				// Create the map in the "map_canvas" <div>
-				map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-				// Create a marker				
+				map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);				
 				user_marker = new google.maps.Marker({
 					position: user,
 					title: "My Location!"
 				});
-				//console.log(marker);
+
 				user_marker.setMap(map);
 
 				loadPeople();
