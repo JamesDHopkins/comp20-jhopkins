@@ -5,7 +5,7 @@
 	<head>
 		<title>Historic Landmarks</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-		<script src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry, drawing"></script>
 		<link rel="stylesheet" href="map.css" />
 		<script>
 			var user;
@@ -17,6 +17,7 @@
 			var tmp_dist;
 			var closest_landmark = {distance: 99999, name: ""};
 			var user_marker;
+			var closest_obj;
 
 			function getLocation(){
 				navigator.geolocation.getCurrentPosition(function(myPos){
@@ -92,8 +93,9 @@
 							if ((tmp_dist * 0.000621371) < closest_landmark.distance) {
 								closest_landmark.distance = tmp_dist * 0.000621371;
 								closest_landmark.name = tmp_marker.title;
+								closest_obj = tmp_marker;
 							}
-							console.log(closest_landmark);
+							console.log(closest_obj);
 
 							tmp_marker.setMap(map);
 
@@ -112,7 +114,25 @@
 							infowindow.setContent("Closest Landmark: " + closest_landmark.name +
 								" | Distance " + closest_landmark.distance + " mi");
 							infowindow.open(map, user_marker);
-						});						
+						});
+
+						var lat2 = (closest_obj.position.lat);
+						var lng2 = (closest_obj.position.lng);
+						console.log(closest_obj.position);
+ 						var to_landmark = [
+          					{lat: lat, lng: lng},
+          					closest_obj.position
+        				];
+
+						var Landmark_line = new google.maps.Polyline({
+          					path: to_landmark,
+          					geodesic: true,
+          					strokeColor: '#FF0000',
+          					strokeOpacity: 1.0,
+          					strokeWeight: 2
+        				});
+
+        				Landmark_line.setMap(map);						
 						//console.log(windows);
 						//console.log(people_data);
 					}
