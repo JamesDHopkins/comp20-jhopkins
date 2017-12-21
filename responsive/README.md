@@ -1,8 +1,4 @@
-README
+# responsive
 
-1. All aspects of the assignment have been correctly implemented to the
-   best of my knowledge
-
-2. I did not collaborate or discuss this assignment with anyone
-
-3. I worked approximately an hour and a half on this assignment 
+This lab was an exercise using CSS. The purpose of this lab was to display different frames of a garfeild
+comic on a sprite map based on resizing the user's browser.
