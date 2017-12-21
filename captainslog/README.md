@@ -1,7 +1,4 @@
-1. All aspects of the work have been correctly implemented to the best of my
-knowledge
+# captainslog
 
-2. I did not collaborate with anyone on this assignment, but much of the code
-is inspired by examples from the jQuery documentation and stack overflow
-
-3. I spent approximately 4.5 hours on this assignment
+This lab was an excersise in using jQuery and localstorage. The objective of this assignment was to create
+a basic message board that would persist in a user's localstorage even if they left the page and came back.
