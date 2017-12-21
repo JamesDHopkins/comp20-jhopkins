@@ -6,6 +6,6 @@ a server and recieves a JSON response of all the historic landmarks within 1 mil
 as well as the past 100 user checkins to the POST request. It then displays on google maps the user's location,
 the landmarks near them, and the past 100 checkins. 
 
-Note: landmark data is only accurate for most parts of New England. Other locations are not guarenteed to recieve
+Note: landmark data is only accurate for most parts of New England. Other locations are not guaranteed to recieve
 an accurate response of nearby landmarks.
 
