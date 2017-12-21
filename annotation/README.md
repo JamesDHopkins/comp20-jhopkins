@@ -1,8 +1,5 @@
-README
+# annotation
 
-1. I have implemented all aspects of the assignment correctly to the best
-of my knowledge
-
-2. I did not collaborate or work with anyone on this assignemnt
-
-3. I spent approximately 3 hours on this assignment
+This lab was an excercise in basic javascript. The objective of this lab was to caption a music
+video with lyrics corresponding to the point of the video you are currently at. This was my first
+real exposure to javascript.
